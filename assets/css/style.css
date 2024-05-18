@@ -1,0 +1,125 @@
+.ClassempIdSuggestions {
+	position:absolute;
+	width:300px;
+	min-height:200px;
+	overflow:auto;
+	z-index:120;
+	border:1px solid #00AEEF;
+	background:#F7F4F4;
+	cursor:pointer;
+}
+.ClassnameIdSuggestions {
+	position:absolute;
+	width:300px;
+	min-height:200px;
+	overflow:auto;
+	z-index:120;
+	border:1px solid #00AEEF;
+	background:#F7F4F4;
+	cursor:pointer;
+}
+.ClassphoneIdSuggestions {
+	position:absolute;
+	width:300px;
+	min-height:200px;
+	overflow:auto;
+	z-index:120;
+	border:1px solid #00AEEF;
+	background:#F7F4F4;
+	cursor:pointer;
+}
+.ClasssuggestingEmpIdList {
+	margin: 0px;
+	padding: 0px;
+}
+.ClasssuggestingPhoneIdList {
+	margin: 0px;
+	padding: 0px;
+}
+.ClasssuggestingNameIdList {
+	margin: 0px;
+	padding: 0px;
+}
+.ClasssuggestingEmpIdList div {
+	margin:0px;
+	padding:3px 0px 3px 5px;
+	font-size:85%;
+	cursor: pointer;
+}
+.ClasssuggestingNameIdList div {
+	margin:0px;
+	padding:3px 0px 3px 5px;
+	font-size:85%;
+	cursor: pointer;
+}
+.ClasssuggestingPhoneIdList div {
+	margin:0px;
+	padding:3px 0px 3px 5px;
+	font-size:85%;
+	cursor: pointer;
+}
+.ClasssuggestingEmpIdList div:hover {
+	background: #E8E1E1;
+}
+.ClasssuggestingNameIdList div:hover {
+	background: #E8E1E1;
+}
+.ClasssuggestingPhoneIdList div:hover {
+	background: #E8E1E1;
+}
+.ClassempNameSuggestions {
+	position:absolute;
+	width:99%;
+	min-height:150px;
+	overflow:auto;
+	z-index:99;
+	border:1px solid #CA0303;
+	background:#F7F4F4;
+	top:20px;
+	left:0px;
+}
+.ClasssuggestingEmpNameList {
+	margin: 0px;
+	padding: 0px;
+}
+.ClasssuggestingEmpNameList div {
+	margin:0px;
+	padding:3px 0px 3px 5px;
+	font-size:85%;
+	cursor: pointer;
+}
+.ClasssuggestingEmpNameList div:hover {
+	background: #E8E1E1;
+}
+
+#cnf-table {
+	width: 100%;
+ 
+}
+
+#cnf-table tbody tr:last-child{
+	border-bottom: none ;
+}
+#cnf-table thead tr {
+	border-left: none;
+	border-right: none;
+}
+#cnf-table tbody tr{
+	border-left: none ;
+	border-right: none ;
+}
+#cnf-table th, td {
+	padding: 20px 3px;
+  }
+#cnf-table-1 tbody tr {
+	border-left: none ;
+	border-right: none ;
+}
+#cnf-table-1 thead tr {
+	border-left: none ;
+	border-right: none ;
+	border-bottom: none;
+}
+
+
+
