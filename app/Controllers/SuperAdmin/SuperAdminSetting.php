@@ -479,23 +479,26 @@ class SuperAdminSetting extends BaseController
     public function getUpozila()
     {
         $parentId = $_REQUEST['id'];
+        $level = $_REQUEST['totalRow'];
+        $upozila = [];
+        
         if (!empty($parentId)) {
-            $upozila= $this->dModel->dynamicCheckExist(['parent_id' =>   $parentId, ], Constants::TABLE_STATE);
-        }
-       
-        $upozilaHtml = '';
-        $upozilaHtml .= " <label for='' class='form-label'>Upozila</label>";
-        $upozilaHtml .= " <select  class='form-select mb-3' name='upozila_id' id='upozila_id' aria-label='Default select example'>";
-        $upozilaHtml .= "  <option value=''>Select upozila</option>";
-        if (!is_null($upozila)) {
-            foreach ($upozila as  $value) {
-                 $upozilaHtml .= "<option value=" . $value['id'] . ">" . $value['name'] . "</option>";
-            }
+            $upozila = $this->dModel->dynamicCheckExist(['parent_id' => $parentId], Constants::TABLE_STATE);
         }
 
-        $upozilaHtml .= "</select>";
+        $upozilaHtml = '';
+        if (!empty($upozila)) {
+            $reference = $upozila[0]['reference'];
+            $upozilaHtml .= "<label for='upozila_id' class='form-label'>$reference</label>";
+            $upozilaHtml .= "<select onchange='getNextDropdown(this.id)' class='form-select mb-3' name='divisionId_$level' id='divisionId_$level' aria-label='Default select example'>";
+            $upozilaHtml .= "<option value=''>Select $reference </option>";
+            foreach ($upozila as $value) {
+                $upozilaHtml .= "<option value=" . $value['id'] . ">" . $value['name'] . "</option>";
+            }
+            $upozilaHtml .= "</select>";
+        }
+
         $data['upozilaHtml'] = $upozilaHtml;
-        $jsonData = json_encode($data);
-        return $this->response->setBody($jsonData)->setContentType('application/json');
+        return $this->response->setJSON($data);
     }
 }

@@ -20,7 +20,7 @@
             <!-- general form elements -->
             <div class="card ">
               <div class="card-header">
-                <h3 class="card-title">Add Area Data</h3>
+                <h3 class="card-title">Searching Area</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -46,33 +46,17 @@
                     }
                   }
                   ?>
-                  <div class="mb-3">
-                    <label for="" class="form-label">Division</label>
-                    <select onchange="getUpozila(this.value)" class="form-select mb-3" name="division_id" id="division_id" aria-label="Default select example">
-                      <option value="">Select Division</option>
-                      <?= $areaOption ?>
-                    </select>
+                  <div id="dropdown-container">
+                    <div class="mb-3" data-level="0">
+                      <label for="division_id" class="form-label"><?= $area[0]['reference'] ?></label>
+                      <select onchange="getNextDropdown(this.id)" class="form-select mb-3" name="divisionId_1" id="divisionId_1" aria-label="Default select example">
+                        <option value="">Select <?= $area[0]['reference'] ?></option>
+                        <?= $areaOption ?>
+                      </select>
+                    </div>
                   </div>
-                  <div class="mb-3" id="upozila">
-                    <label for="" class="form-label">Upozila</label>
-                    <select class="form-select mb-3" name="upozila_id" id="upozila_id" aria-label="Default select example">
-                      <option value="">Select upozila</option>
+                  <input type="hidden" name="count" id="count" value="1">
 
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <label for="name" class="form-label">State Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="State Name">
-                  </div>
-                  <div class="mb-3">
-                    <label for="reference" class="form-label">Reference</label>
-                    <input type="text" class="form-control" id="reference" name="reference" placeholder="Reference">
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="sort" class="form-label">Sort</label>
-                    <input type="number" class="form-control" id="sort" name="sort" placeholder="Sort value">
-                  </div>
 
                   <div class="text-center">
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -104,31 +88,65 @@
         return true;
       }
 
-      function getUpozila(id) {
-        let base_url = '<?= BASE_URL ?>super-admin';
-        let upozila = document.getElementById('upozila');
-        if (id == '') {
-          let upozilaHtml = '';
-          upozilaHtml += " <label for='' class='form-label'>Upozila</label>";
-          upozilaHtml += " <select  class='form-select mb-3' name='upozila_id' id='upozila_id' aria-label='Default select example'>";
-          upozilaHtml += "  <option value=''>Select upozila</option>";
-          upozilaHtml += "</select>";
-          return upozila.innerHTML =  upozilaHtml;
-        }
-        $.post(base_url + "/getUpozila", {
-          id: id,
-        }, function(data) {
-          let upozila = document.getElementById('upozila');
-          console.log(data);
-          if(data !== null) {
-            upozila.innerHTML = data.upozilaHtml;
+      function getNextDropdown(id) {
+        let base_url = '<?= base_url() ?>';
+        let parentId = $(`#${id}`).val();
 
-          } else {
-            upozila.innerHTML = upozila;
-          }
-         
+        let elementId = id.split('_');
+        elementId = elementId[1];
+        console.log({
+          elementId: elementId
         });
+        let totalRow = $('#count').val();
+        let countRowVal = $('#count').val();
+
+
+        if (parentId == '') {
+          console.log('inside null check:', elementId);
+          if (countRowVal > elementId) {
+            for (let index = elementId; index <= countRowVal; index++) {
+              if (index == elementId) {
+                continue;
+              }
+              $(`#dropdown_${index}`).remove();
+
+            }
+          }
+          document.getElementById('count').value = elementId;
+          return;
+        }
+
+        $.post(base_url + "/super-admin/getUpozila", {
+          id: parentId,
+          totalRow: ++totalRow,
+        }, function(data) {
+          console.log({
+            119: elementId,
+
+          });
+          if (countRowVal > elementId) {
+            for (let index = elementId; index <= countRowVal; index++) {
+              if (index == elementId) {
+                continue;
+              }
+              $(`#dropdown_${index}`).remove();
+
+            }
+            document.getElementById('count').value = elementId;
+          }
+          if (data.upozilaHtml) {
+            document.getElementById('count').value = totalRow;
+
+            let newDropdown = `<div class="mb-3" id="dropdown_${totalRow}" >
+                        ${data.upozilaHtml}
+                    </div>`;
+            $('#dropdown-container').append(newDropdown);
+          }
+
+
+        }, 'json');
 
       }
+    </script>
     </script>
     <?php include "super-admin-footer.php"; ?>
