@@ -7,6 +7,8 @@ use App\Controllers\BaseController;
 use App\Models\DynamicModel;
 use App\Models\CnfModel;
 
+use PragmaRX\Google2FA\Google2FA;
+
 class Auth extends BaseController
 {
     protected $parentId = null;
@@ -62,22 +64,57 @@ class Auth extends BaseController
                     return redirect()->to($this->dModel->falseReturn('/login', 'Invalid  email or password!!!'));
                 }
                 $this->dModel->dynamicUpdate(['id' => $result['id']], Constants::TABLE_USERS, ['login_failed' =>  Constants::DEACTIVE]);
-                $userData[$result['user_group']] = [
+                $userData['login'] = [
                     'client_id'          => $result['client_id'],
                     'op_id'              => $result['id'],
-                    'email'              => $result['email'],
-                    'name'          => $result['name'],
-                    'last_name'          => $result['last_name'],
-                    'user_group'          => $result['user_group'],
                 ];
-                $userData['user_group'] = $result['user_group'];
                 session()->set($userData);
-                return redirect()->to($this->dModel->successReturn('/' . Constants::USER_GROUP_ROUTE[$result['user_group']], ''));
+                return redirect()->to($this->dModel->successReturn('/login/google-authenticator', ''));
             }
         }
         $this->data['formUrl'] = BASE_URL . 'login';
         return view('auth/login', $this->data);
     }
+    public function googleAuthenticator()
+    {
+        $credential = session()->get('login');
+        $userGroup = session()->get('user_group');
+
+        [$this->data['fmsg'], $this->data['status']] = $this->dModel->methodStartSession();
+
+        if ($this->request->getPost()) {
+            $otp = $this->request->getPost('otp');
+            $user = $this->dModel->dynamicCheckExistSingleRow(['client_id' => $credential['client_id'], 'id' => $credential['op_id']], Constants::TABLE_USERS);
+            $_g2fa = new Google2FA();
+            $url = $_g2fa->getQRCodeUrl('test', 'kayes', $user['secret_key']);
+           $d = 'http://chart.apis.google.com/chart?chs=' . 100 . 'x' . 100 .
+            '&chld=M|0&cht=qr&chl=' . urlencode($url);
+            
+            dd($d);
+            $verify = $_g2fa->verify($otp, $user['secret_key']);
+            if ($verify) {
+                $otpData[$user['user_group']] = [
+                    'client_id'          => $user['client_id'],
+                    'op_id'              => $user['id'],
+                    'email'              => $user['email'],
+                    'name'          => $user['name'],
+                    'last_name'          => $user['last_name'],
+                    'user_group'          => $user['user_group'],
+                    'secret_key' => $user['secret_key'],
+                    'validation' => true
+                ];
+                $otpData['user_group'] = $user['user_group'];
+                session()->set($otpData);
+                return redirect()->to($this->dModel->successReturn('/' . Constants::USER_GROUP_ROUTE[$user['user_group']], ''));
+            }
+            return redirect()->to($this->dModel->falseReturn('/login/google-authenticator', 'Invalid OTP'));
+
+            //    380329
+        }
+        $this->data['formUrl'] = BASE_URL . 'login/google-authenticator';
+        return view('layout/super-admin/google-authenticator', $this->data);
+    }
+   
     /* logged out */
     public function logout()
     {

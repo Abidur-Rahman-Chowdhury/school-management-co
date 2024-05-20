@@ -79,6 +79,9 @@
                             <li class="nav-item">
                                 <a href="/super-admin/view-user" class="nav-link" data-key="t-view-user"> View User </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="/super-admin/google-authenticator" class="nav-link" data-key="t-google-authenticator"> Google Authenticator </a>
+                            </li>
                         </ul>
                     </div>
                 </li> <!-- end Dashboard Menu -->

@@ -28,10 +28,12 @@ class SuperAdmin extends BaseController
        
         $userGroup = session()->get('user_group');
         $userData = session()->get($userGroup);
+       
         if(empty($userGroup)) {
             return redirect()->to(rtrim(BASE_URL, '/') . '/login');
         }
-        if(!in_array($userGroup, [Constants::USER_GROUP[0]])) {
+        
+        if(!in_array($userGroup, [Constants::USER_GROUP[0]]) ) {
             return redirect()->to(rtrim(BASE_URL, '/') . '/login');
         } 
         return view('layout/super-admin/super-admin-home');
@@ -152,12 +154,12 @@ class SuperAdmin extends BaseController
         echo $str;
         exit;
     }
-    public function superAdmindeleteData($route = null, $id = null, $delValue = null, $table, $backRoutue = null)
+    public function superAdmindeleteData($route = null, $id = null, $delValue = null, $table = null, $backRoutue = null)
     {
       
         $this->dModel->dynamicUpdate(['id' => $id,], $table, ['is_active' => $delValue]);
     }
-    public function superAdminActDecData($route = null, $id = null, $actDec = null, $table, $backRoutue)
+    public function superAdminActDecData($route = null, $id = null, $actDec = null, $table = null, $backRoutue = null)
     {   
     
         $this->dModel->dynamicUpdate(['id' => $id], $table, ['is_active' => $actDec]);

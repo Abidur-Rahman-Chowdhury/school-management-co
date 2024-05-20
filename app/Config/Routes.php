@@ -7,7 +7,9 @@ use CodeIgniter\Router\RouteCollection;
  */
 /* AUTH START */
 $routes->add('/login', 'Auth\Auth::login');
+$routes->add('/login/google-authenticator', 'Auth\Auth::googleAuthenticator');
 $routes->add('/logout', 'Auth\Auth::logout');
+
 /* AUTH END */
 
 $routes->add('/super-admin', 'SuperAdmin\SuperAdmin::index');
@@ -27,6 +29,7 @@ $routes->add('/super-admin/edit-states-data/(:num)', 'SuperAdmin\SuperAdminSetti
 $routes->add('/super-admin/show-states', 'SuperAdmin\SuperAdmin::showStatesInformation');
 $routes->add('/super-admin/add-area', 'SuperAdmin\SuperAdminSetting::addArea');
 $routes->add('/super-admin/getUpozila', 'SuperAdmin\SuperAdminSetting::getUpozila');
+// $routes->add('/super-admin/google-authenticator', 'SuperAdmin\SuperAdminSetting::googleAuthenticator');
 $routes->add('/super-admin/change-password', 'SuperAdmin\SuperAdminSetting::changePassword');
 $routes->add('/super-admin/delete/(:any)/(:num)/(:num)/(:any)/(:any)', 'SuperAdmin\SuperAdmin::superAdmindeleteData/$1/$2/$3/$4/$5');
 $routes->add('/super-admin/act-dec/(:any)/(:num)/(:num)/(:any)/(:any)', 'SuperAdmin\SuperAdmin::superAdminActDecData/$1/$2/$3/$4/$5');

@@ -6,7 +6,9 @@ use App\Constant\Constants;
 use App\Controllers\BaseController;
 use App\Models\SchoolModel;
 use App\Models\DynamicModel;
+require 'vendor/autoload.php';
 
+use PragmaRX\Google2FA\Google2FA;
 
 
 class SuperAdminSetting extends BaseController
@@ -339,6 +341,8 @@ class SuperAdminSetting extends BaseController
             if ($pData['password'] !== $pData['repass']) {
                 return redirect()->to($this->dModel->falseReturn('/super-admin/add-user', 'password dont match !!!'));
             }
+            $_g2fa = new Google2FA();
+            $secret = $_g2fa->generateSecretKey();
             $softUsersData =  [
                 'client_id' => $pData['client_id'] ?? 0,
                 'name' => $pData['name'],
@@ -352,6 +356,7 @@ class SuperAdminSetting extends BaseController
                 'end_date' =>  $pData['end_date'],
                 'user_group' =>  $pData['user_group'],
                 'op_id' => $userData['op_id'] ?? 0,
+                'secret_key' =>   $secret
             ];
             $insertData = $this->dModel->dynamicInsertReturnId($softUsersData, Constants::TABLE_USERS);
             if (!$insertData) {
@@ -469,8 +474,8 @@ class SuperAdminSetting extends BaseController
             return redirect()->to(rtrim(BASE_URL, '/') . '/login');
         }
         $this->data['area'] = $this->dModel->dynamicCheckExist(['parent_id' => Constants::PARENT_ID], Constants::TABLE_STATE);
-      
-       
+
+
         $this->data['formUrl'] = BASE_URL . 'super-admin/add-state';
         $this->data['states'] = $this->statesTree();
         return view('layout/super-admin/add-area', $this->data);
@@ -481,7 +486,7 @@ class SuperAdminSetting extends BaseController
         $parentId = $_REQUEST['id'];
         $level = $_REQUEST['totalRow'];
         $upozila = [];
-        
+
         if (!empty($parentId)) {
             $upozila = $this->dModel->dynamicCheckExist(['parent_id' => $parentId], Constants::TABLE_STATE);
         }
@@ -501,4 +506,5 @@ class SuperAdminSetting extends BaseController
         $data['upozilaHtml'] = $upozilaHtml;
         return $this->response->setJSON($data);
     }
+   
 }
