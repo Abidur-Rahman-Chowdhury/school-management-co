@@ -8,6 +8,8 @@ class Constants
     'yearly', 'monthly'
   ];
   public const ACTIVE = 1;
+  public const AUTH_REQ_YES = 1;
+  public const AUTH_REQ_NO = 0;
   public const DEACTIVE = 0;
   public const BLOCK_COUNT = 3;
   public const USER_GROUP =  ['super_admin', 'admin_user', 'merchant_admin', 'merchant_user',];

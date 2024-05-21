@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 /* AUTH START */
 $routes->add('/login', 'Auth\Auth::login');
 $routes->add('/login/google-authenticator', 'Auth\Auth::googleAuthenticator');
+$routes->add('/login/setup-secret-key', 'Auth\Auth::setUpSecretKey');
 $routes->add('/logout', 'Auth\Auth::logout');
 
 /* AUTH END */
